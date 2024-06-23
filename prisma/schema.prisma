@@ -1,0 +1,266 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["rpg", "public"]
+}
+
+model foo {
+  id          Int     @id @default(autoincrement())
+  foo_name    String  @unique
+  foo_address String?
+
+  @@schema("public")
+}
+
+model armamentos {
+  id_armamento          Int      @id @default(autoincrement())
+  nome_armamento        String?  @db.VarChar(48)
+  tipo_armamento        Int?
+  base_armamento        Int?
+  nivel_base_armamento  Int?
+  raridade_armamento    Int?
+  historia_armamento    String?
+  origem_armamento      Int?
+  imagem_armamento_path String?
+  data_insert           String?  @db.VarChar(32)
+  data_update           String?  @db.VarChar(32)
+  status                Boolean?
+
+  @@schema("rpg")
+}
+
+model ingrediente_receita_itens {
+  id_ingrediente_receita_itens Int @id @default(autoincrement())
+  id_ingrediente               Int
+  id_receita_item              Int
+
+  @@schema("rpg")
+}
+
+model ingredientes {
+  id_ingrediente          Int     @id @default(autoincrement())
+  nome_ingrediente        String? @db.VarChar(32)
+  historia_ingrediente    String?
+  imagem_ingrediente_path String?
+  origem_ingrediente      Int?
+
+  @@schema("rpg")
+}
+
+model inventario_armamentos {
+  id            Int  @id @default(autoincrement())
+  id_inventario Int
+  id_arma       Int
+  nivel_arma    Int?
+
+  @@schema("rpg")
+}
+
+model inventario_itens {
+  id              Int @id @default(autoincrement())
+  id_inventario   Int
+  id_item         Int
+  quantidade_item Int
+
+  @@schema("rpg")
+}
+
+model inventario_magias_agartheanas {
+  id               Int  @id @default(autoincrement())
+  id_inventario    Int
+  id_agartheana    Int
+  nivel_agartheana Int?
+
+  @@schema("rpg")
+}
+
+model inventario_magias_elementais {
+  id              Int  @id @default(autoincrement())
+  id_inventario   Int
+  id_elemental    Int
+  nivel_elemental Int?
+
+  @@schema("rpg")
+}
+
+model inventario_talentos_classe {
+  id                Int @id @default(autoincrement())
+  id_inventario     Int
+  id_talento_classe Int
+
+  @@schema("rpg")
+}
+
+model inventario_talentos_raca {
+  id              Int @id @default(autoincrement())
+  id_inventario   Int
+  id_talento_raca Int
+
+  @@schema("rpg")
+}
+
+model inventarios {
+  id_inventario Int      @id @default(autoincrement())
+  id_personagem Int
+  data_insert   String?  @db.VarChar(32)
+  data_update   String?  @db.VarChar(32)
+  status        Boolean?
+
+  @@schema("rpg")
+}
+
+model itens {
+  id_item          Int      @id @default(autoincrement())
+  nome_item        String?  @db.VarChar(48)
+  tipo_item        Int?
+  historia_item    String?
+  origem_item      Int?
+  imagem_item_path String?
+  data_create      String?  @db.VarChar(32)
+  data_update      String?  @db.VarChar(32)
+  status           Boolean?
+
+  @@schema("rpg")
+}
+
+model jogadores {
+  id_jogador      Int      @id @default(autoincrement())
+  nome_jogador    String?  @db.VarChar(32)
+  apelido_jogador String?  @db.VarChar(32)
+  data_insert     String?  @db.VarChar(32)
+  data_update     String?  @db.VarChar(32)
+  status          Boolean?
+
+  @@schema("rpg")
+}
+
+model magias_agartheanas {
+  id_agartheana         Int @id @default(autoincrement())
+  nome_agartheana       String?  @db.VarChar(32)
+  cunho_agartheana      Int?
+  nivel_base_agartheana Int?
+  historia_agartheana   String?
+  origem_agartheana     Int?
+  data_insert           String?  @db.VarChar(32)
+  data_update           String?  @db.VarChar(32)
+  status                Boolean?
+
+  @@schema("rpg")
+}
+
+model magias_elementais {
+  id_elemental         Int      @id @default(autoincrement())
+  nome_elemental       String?  @db.VarChar(32)
+  elemento_elemental   Int?
+  nivel_base_elemental Int?
+  historia             String?
+  origem_elemental     Int?
+  data_insert          String?  @db.VarChar(32)
+  data_update          String?  @db.VarChar(32)
+  status               Boolean?
+
+  @@schema("rpg")
+}
+
+model origem_ingredientes {
+  id_origem_ingrediente Int @id @default(autoincrement())
+  id_ingrediente        Int
+  id_origem             Int
+
+  @@schema("rpg")
+}
+
+model personagens {
+  id_personagem          Int      @id @default(autoincrement())
+  nome_personagem        String?  @db.VarChar(48)
+  apelido_personagem     String?  @db.VarChar(48)
+  idade                  Int?
+  sexo_genero            Int?
+  altura                 Float?
+  peso                   Float?
+  raca                   Int?
+  profissao_fantasia     String?  @db.VarChar(64)
+  papel                  Int?
+  classe                 Int?
+  historia_personagem    String?
+  imagem_personagem_path String?
+  id_jogador             Int?
+  status                 Boolean?
+
+  @@schema("rpg")
+}
+
+model raca {
+  id_raca       Int      @id @default(autoincrement())
+  nome_raca     String?  @db.VarChar(48)
+  historia_raca String?
+  ishibrido     Boolean?
+  data_insert   String?  @db.VarChar(32)
+  data_update   String?  @db.VarChar(32)
+  status        Boolean?
+
+  @@schema("rpg")
+}
+
+model racas_hibridas {
+  id_raca_hibrida Int      @id @default(autoincrement())
+  id_raca1        Int
+  id_raca2        Int
+  id_raca3        Int?
+  id_raca4        Int?
+  data_insert     String?  @db.VarChar(32)
+  data_update     String?  @db.VarChar(32)
+  status          Boolean?
+
+  @@schema("rpg")
+}
+
+model receita_itens {
+  id_receita_item Int @id @default(autoincrement())
+  id_item         Int
+
+  @@schema("rpg")
+}
+
+model talento_classe_razao {
+  id_tcr            Int @id @default(autoincrement())
+  id_talento_classe Int
+  id_classe         Int
+
+  @@schema("rpg")
+}
+
+model talento_raca_razao {
+  id_trr          Int @id @default(autoincrement())
+  id_talento_raca Int
+  id_raca         Int
+
+  @@schema("rpg")
+}
+
+model talentos_classe {
+  id_talento_classe Int      @id @default(autoincrement())
+  titulo            String?  @db.VarChar(48)
+  descricao         String?
+  data_insert       String?  @db.VarChar(32)
+  data_update       String?  @db.VarChar(32)
+  status            Boolean?
+
+  @@schema("rpg")
+}
+
+model talentos_raca {
+  id_talento_raca Int      @id @default(autoincrement())
+  titulo          String?  @db.VarChar(48)
+  descricao       String?
+  data_insert     String?  @db.VarChar(32)
+  data_update     String?  @db.VarChar(32)
+  status          Boolean?
+
+  @@schema("rpg")
+}
