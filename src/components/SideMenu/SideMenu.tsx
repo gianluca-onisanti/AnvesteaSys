@@ -44,7 +44,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-const menuRouteList = ["data"];
+const menuRouteList = ["gerenciar_jogadores"];
 const menuListTranslations = [
   "Lista de Jogadores",
 ];
