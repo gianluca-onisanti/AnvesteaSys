@@ -32,16 +32,6 @@ export default function GerenciarJogadores() {
   const [dataFinal, setDataFinal] = useState(dayjs());
   const [listaUnidades, setListaUnidades] = useState<string[]>([]);
 
-  const opcoesUnidades : {key: string, value: string}[]= [
-    {key: '0', value: 'Araucária'},
-    {key: '1', value: 'Seropédica'},
-    { key: '2', value: 'Monte Mor' },
-  ];
-
-  function getAllUnidades() {
-    return 'ARAUCÁRIA,SEROPÉDICA,MONTE MOR'
-  }
-
   const handleChange = (e: any) => {
     const { value } = e.target;
     setListaUnidades(value);
@@ -59,7 +49,6 @@ export default function GerenciarJogadores() {
         siglaObra: siglaObra.toUpperCase(),
         dataInicial: new Date(dataInicial.toString()),
         dataFinal: new Date(dataFinal.toString()),
-        listaUnidades: (listaUnidades.length > 0) ? listaUnidades.join(",").toUpperCase() : getAllUnidades(),
       }
     })
       .then((response: any) => {
@@ -175,12 +164,12 @@ export default function GerenciarJogadores() {
                 renderValue={(e) => e ? e.join(', ') : ''}
                 input={<OutlinedInput label="Unidade" />}
               >
-                {opcoesUnidades.map((unidade) => (
+                {/* {opcoesUnidades.map((unidade) => (
                   <MenuItem key={unidade.key} value={unidade.value}>
                     <Checkbox checked={listaUnidades.includes(unidade.value)} />
                     {unidade.value}
                   </MenuItem>
-                ))}
+                ))} */}
               </Select>
             </FormControl>
           </Grid>
