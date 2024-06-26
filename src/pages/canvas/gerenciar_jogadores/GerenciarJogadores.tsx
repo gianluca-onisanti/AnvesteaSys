@@ -15,7 +15,6 @@ import {
   Grid,
   TextField,
   Typography,
-  MenuItem,
   FormControl,
   InputLabel,
   Select,
@@ -27,14 +26,18 @@ export default function GerenciarJogadores() {
 
   const [data, setData] = useState([]);
   const [nomeObra, setNomeObra] = useState("");
-  const [siglaObra, setSiglaObra] = useState("")
+  const [nomeJogador, setSiglaObra] = useState("")
   const [dataInicial, setDataInicial] = useState(dayjs().startOf('month'));
   const [dataFinal, setDataFinal] = useState(dayjs());
   const [listaUnidades, setListaUnidades] = useState<string[]>([]);
 
+  const [filtrosJogador, setFiltrosJogador] = useState({
+    nomeApelido: '',
+
+  })
+
   const handleChange = (e: any) => {
-    const { value } = e.target;
-    setListaUnidades(value);
+
   };
 
   useEffect(() => {
@@ -115,22 +118,13 @@ export default function GerenciarJogadores() {
           Gerenciar Jogadores
         </Typography>
         <Grid container spacing={3} marginBottom={2}>
-          <Grid item xs={12} sm={1}>
-            <TextField
-              fullWidth
-              label="Sigla"
-              name="siglaObra"
-              value={siglaObra}
-              onChange={(e) => setSiglaObra(e.target.value)}
-            />
-          </Grid>
           <Grid item xs={12} sm={3}>
             <TextField
               fullWidth
-              label="Nome da Obra"
-              name="nomeObra"
-              value={nomeObra}
-              onChange={(e) => setNomeObra(e.target.value)}
+              label="Nome/Apelido do Jogador"
+              name="siglaObra"
+              value={filtrosJogador.nomeApelido}
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={2}>
@@ -139,7 +133,7 @@ export default function GerenciarJogadores() {
                 label="Data Inicial"
                 value={dataInicial}
                 maxDate={dataFinal}
-                onChange={(e) => setDataInicial(dayjs(e))}
+                onChange={handleChange}
               />
             </LocalizationProvider>
           </Grid>
