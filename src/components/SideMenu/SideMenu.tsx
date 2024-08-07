@@ -1,12 +1,13 @@
 import { CSSObject } from "@mui/system";
 import * as React from "react";
+import { signOut } from "next-auth/react";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Bolt, ContentPasteSearch, Fingerprint, ManageAccounts, Settings } from "@mui/icons-material";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
 import scss from "./SideMenu.module.scss";
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
-
 import {
   Divider,
   Drawer,
@@ -16,10 +17,10 @@ import {
   ListItemIcon,
   ListItemText,
   Theme,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { signOut } from "next-auth/react";
 
 const drawerWidth = 240;
 
@@ -44,26 +45,51 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-const menuRouteList = ["gerenciar_jogadores"];
-const menuListTranslations = [
-  "Lista de Jogadores",
+const menuRouteList = [
+  "*Básicos de Ficha",
+  "gerenciar_jogadores",
+  "gerenciar_personagens",
+  // "gerenciar_times",
+  // "*Sessão de Relatórios",
+  // "projetadas",
+  // "*Configurações",
+  // "perfil", 
+  // "ajustes"
 ];
+
+const menuListTranslations = [
+  "/Gerenciar Jogadores",
+  "Jogadores",
+  "Personagens",
+  // "Times",
+  // "/Sessão de Relatórios",
+  // "Peças Projetadas",
+  // "/Configurações",
+  // "Perfil",
+  // "Ajustes",
+];
+
 const menuListIcons = [
-  <FingerprintIcon />,
+  <></>,
+  <Fingerprint />,
+  <Bolt />,
+  // <Diversity2Icon />,
+  // <></>,
+  // <ContentPasteSearch />,
+  // <></>,
+  // <Person2Icon />,
+  // <Settings />,
 ];
 
 const SideMenu = () => {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const mobileCheck = useMediaQuery("(min-width: 600px)");
+  const theme = useTheme()
+  const [open, setOpen] = React.useState(false)
+  const mobileCheck = useMediaQuery("(min-width: 600px)")
+  const router = useRouter()
+  const currentRoute = router.pathname
 
   const handleDrawerToggle = () => {
     setOpen(!open);
-    if(theme.direction === 'ltr'){
-      theme.direction = 'rtl'
-    }else{
-      theme.direction = 'ltr'
-    }
   };
 
   const handleListItemButtonClick = (text: string) => {
@@ -76,10 +102,10 @@ const SideMenu = () => {
       variant="permanent"
       anchor="left"
       open={open}
-      className={scss.sideMenu}
       sx={{
         width: drawerWidth,
         [`& .MuiDrawer-paper`]: {
+          backgroundColor: theme.palette.boxColor.main,
           left: 0,
           top: mobileCheck ? 64 : 57,
           flexShrink: 0,
@@ -98,50 +124,61 @@ const SideMenu = () => {
     >
       <div className={scss.drawerHeader}>
         <IconButton onClick={handleDrawerToggle}>
-          {theme.direction === "ltr" ? (
-            <ChevronRightIcon />
-          ) : (
+          {open ?
             <ChevronLeftIcon />
-          )}
+            :
+            <ChevronRightIcon />
+          }
         </IconButton>
       </div>
       <Divider />
       <Divider />
+
       <List>
         {menuListTranslations.map((text, index) => (
           <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <NextLink
-              className={scss.link}
-              href={`/canvas/${menuRouteList[index]}`}
-            >
-              <ListItemButton
-                onClick={() => handleListItemButtonClick(text)}
-                title={text}
-                aria-label={text}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+           {!menuRouteList[index].includes("*") ? (
+              <NextLink
+                className={scss.link}
+                href={`/canvas/${menuRouteList[index]}`}
               >
-                <ListItemIcon
+                <ListItemButton
+                  onClick={() => handleListItemButtonClick(text)}
+                  title={text}
+                  aria-label={text}
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    backgroundColor: (currentRoute.includes(menuRouteList[index])) ? theme.palette.hover.main : 'default',
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  {menuListIcons[index]}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{
-                    color: theme.palette.text.primary,
-                    opacity: open ? 1 : 0,
-                  }}
-                />{" "}
-              </ListItemButton>
-            </NextLink>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                      color: (currentRoute.includes(menuRouteList[index])) ? theme.palette.primary.main : 'default',
+                    }}
+                  >
+                    {menuListIcons[index]}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={{
+                      color: theme.palette.text.primary,
+                      opacity: open ? 1 : 0,
+                    }}
+                  />{" "}
+                </ListItemButton>
+              </NextLink>
+           ) : (
+              <Divider textAlign='left' sx={{display: 'flex'}}>
+                <Typography variant="caption" display='inline-list-item' position='sticky'>
+                  {open && menuRouteList[index].slice(1)}
+                </Typography>
+              </Divider>
+           )}
           </ListItem>
         ))}
       </List>

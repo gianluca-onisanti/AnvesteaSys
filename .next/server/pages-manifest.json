@@ -2,6 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/api/dropdownlists/ddl_jogadores": "pages/api/dropdownlists/ddl_jogadores.js",
+  "/api/personagens/read": "pages/api/personagens/read.js",
+  "/api/dropdownlists/ddl_raca": "pages/api/dropdownlists/ddl_raca.js",
   "/canvas/gerenciar_jogadores": "pages/canvas/gerenciar_jogadores.js",
-  "/": "pages/index.js"
+  "/canvas/gerenciar_personagens": "pages/canvas/gerenciar_personagens.js"
 }

@@ -1,15 +1,28 @@
-import {ThemeOptions} from "@mui/material";
+import {PaletteOptions, PaletteColorOptions, ThemeOptions} from "@mui/material";
+
+interface CustomPaletteOptions extends PaletteOptions {
+    hover?: PaletteColorOptions;
+}
 
 const darkTheme: ThemeOptions = {
     palette: {
         mode: 'dark',
         primary: {
-            main: '#ff0000',
+            main: '#6fbde0',
         },
         secondary: {
-            main: '#7000ff',
+            main: '#00304e',
         },
-    }
+        background: {
+            default: "#474747",
+        },
+        hover: {
+            main:'#375e70',
+        },
+        boxColor: {
+            main: '#303030'
+        },
+    } as CustomPaletteOptions
 }
 
 export default darkTheme;

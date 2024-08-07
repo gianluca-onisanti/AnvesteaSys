@@ -8,16 +8,16 @@ const Layout = (props: any) => {
   return (
     <>
       <Head>
-        <title>Anvestea's RPG - Por Gianluca</title>
+        <title>Anvestea's: by Gianluca Onisanti</title>
         <meta name="description" content="Data Dashboard" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main
         className={scss.layout}
-        style={{ padding: "0 24px 0 80px"}}
+        style={{padding: "0 24px 0 80px"}}
       >
-        {<SideMenu />}
+        <SideMenu />
         {props.children}
       </main>
     </>

@@ -4,7 +4,7 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import React from "react";
 import {useTheme} from "@mui/system";
 import Typography from "@mui/material/Typography";
-import {useMediaQuery} from "@mui/material";
+import {Box, Tooltip, useMediaQuery} from "@mui/material";
 
 export type ThemeToggleButtonProps = {
     ColorModeContext: React.Context<{ toggleColorMode: () => void; }>,
@@ -18,11 +18,13 @@ const ThemeToggleButton = (props: ThemeToggleButtonProps) => {
     return (
         <>
             {mobileCheck && (
-                <Typography>{theme.palette.mode === 'light' ? "Tema Claro" : "Tema Escuro"}</Typography>)
+                <Typography sx={{ color: "#ffffff" }} >{theme.palette.mode === 'dark' ? "Escuro" : "Claro"}</Typography>)
             }
-            <IconButton sx={{mr: 2}} title={theme.palette.mode + ' mode'} aria-label={theme.palette.mode + ' mode button'} onClick={colorMode.toggleColorMode} color="inherit">
+            <Tooltip title={"Tema " + (theme.palette.mode === 'dark' ? "Escuro" : "Claro") }>
+            <IconButton sx={{mr: 2, color: "#ffffff"}} aria-label={theme.palette.mode + ' mode button'} onClick={colorMode.toggleColorMode} color="inherit">
                 {theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
             </IconButton>
+            </Tooltip>
         </>)
 }
 

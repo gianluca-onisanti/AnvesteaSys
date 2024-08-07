@@ -1,15 +1,10 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import AdbIcon from "@mui/icons-material/Adb";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
-import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/system";
 
 export type HeaderProps = {
@@ -17,37 +12,15 @@ export type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
+
   const { ColorModeContext } = props;
   const theme = useTheme();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  const tabletCheck = useMediaQuery("(min-width: 768px)");
 
   return (
-    <AppBar position="static" sx={{ marginBottom: "40px" }}>
+    <AppBar position="sticky" sx={{ backgroundColor: theme.palette.secondary.main , marginBottom: "40px" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <AdbIcon sx={{ color:"#ffffff", display: { xs: "none", md: "flex", }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -56,15 +29,15 @@ const Header = (props: HeaderProps) => {
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "bahnschrift",
+              fontFamily: "monospace",
               fontWeight: 700,
-              color: "inherit",
+              color: "#ffffff",
               textDecoration: "none",
             }}
           >
             Anvestea's RPG
           </Typography>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <AdbIcon sx={{ color:"#ffffff", display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -74,22 +47,20 @@ const Header = (props: HeaderProps) => {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "bahnschrift",
+              fontFamily: "monospace",
               fontWeight: 700,
-              color: "inherit",
+              color: "#ffffff",
               textDecoration: "none",
             }}
           >
             Anvestea's RPG
           </Typography>
-          {tabletCheck && (
-            <Box sx={{ paddingRight: 5, marginLeft: "auto" }}>
-            </Box>
-          )}
+          <div style={{marginRight: '1100px'}} />
           <ThemeToggleButton ColorModeContext={ColorModeContext} />
         </Toolbar>
       </Container>
     </AppBar>
+
   );
 };
 export default Header;

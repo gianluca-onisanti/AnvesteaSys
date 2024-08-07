@@ -1,57 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { LocalizationProvider , DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import axios from 'axios';
 import dayjs from 'dayjs';
 import "dayjs/locale/pt-br";
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-dayjs.extend(isSameOrBefore)
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-dayjs.extend(isSameOrAfter)
-import { DataGrid } from '@mui/x-data-grid';
+import { EnumStatus } from '@/rules/Enums';
+import { useTranslation } from 'react-i18next';
+import DropDownList from '@/components/Utils/DropDownList';
+import ListView from '@/components/Utils/ListView';
+import Modal_GerenciarJogadores from './Modal_GerenciarJogadores';
 import {
   Container,
   Box,
   Grid,
   TextField,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  Checkbox,
+  useTheme,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
+import { Archive, ModeEdit, Unarchive } from '@mui/icons-material';
 
 export default function GerenciarJogadores() {
 
-  const [data, setData] = useState([]);
-  const [nomeObra, setNomeObra] = useState("");
-  const [nomeJogador, setSiglaObra] = useState("")
-  const [dataInicial, setDataInicial] = useState(dayjs().startOf('month'));
-  const [dataFinal, setDataFinal] = useState(dayjs());
-  const [listaUnidades, setListaUnidades] = useState<string[]>([]);
+  const theme = useTheme()
+  const { t } = useTranslation()
+  const [data, setData] = useState([])
+  const [open, setOpen] = React.useState({create: false, edit: false, archive: false})
+  const [idToEdit, setIdToEdit] = useState<number | undefined>()
 
-  const [filtrosJogador, setFiltrosJogador] = useState({
+  const [filtros, setFiltros] = useState({
     nomeApelido: '',
-
+    statusJogador: ''
   })
 
-  const handleChange = (e: any) => {
+  const opcoesStatus : {key: string, value: string}[]= [
+    {key: '2', value: 'Todos'},
+    {key: '1', value: 'Ativos'},
+    {key: '0', value: 'Inativos' },
+  ];
 
+  const handleChange = (e: any) => {
+    setFiltros({
+      ...filtros,
+      [e.target.name]: e.target.value
+    })
   };
+
+  const handleOpen = (modalFunction : 'create' | 'edit' | 'archive', userId? : number) => {
+    setOpen({
+      create: modalFunction === 'create',
+      edit: modalFunction === 'edit',
+      archive: modalFunction === 'archive',
+    })
+    setIdToEdit(userId)
+  }
+
+  const handleClose = (modalFunction: 'create' | 'edit' | 'archive') => {
+    setOpen({
+      ...open,
+      [modalFunction]: false,
+    })
+    getData()
+  }
 
   useEffect(() => {
     getData();
-    console.log(listaUnidades)
-  }, [nomeObra, siglaObra, dataInicial, dataFinal, listaUnidades]);
+  }, [filtros]);
 
   const getData = () => {
-    axios.get("/api/pecas_projetadas", {
+    axios.get("/api/jogadores/read", {
       params: {
-        nomeObra: nomeObra.toUpperCase(),
-        siglaObra: siglaObra.toUpperCase(),
-        dataInicial: new Date(dataInicial.toString()),
-        dataFinal: new Date(dataFinal.toString()),
+        nomeJogador: filtros.nomeApelido.toUpperCase(),
+        statusJogador: filtros.statusJogador !== 'Todos' ? EnumStatus?.[filtros.statusJogador as keyof typeof EnumStatus] : undefined
       }
     })
       .then((response: any) => {
@@ -65,46 +84,67 @@ export default function GerenciarJogadores() {
 
   const columns = [
     {
-      field: 'sigla_obra',
-      headerName: 'Sigla',
-      width: 100,
+      field: 'nome_jogador',
+      headerName: 'Nome do Jogador',
+      flex: 2.5,
     },
     {
-      field: 'nome_obra',
-      headerName: 'Nome da Obra',
-      width: 370,
+      field: 'apelido_jogador',
+      headerName: 'Apelido',
+      flex: 2.5,
     },
     {
-      field: 'data_registro',
-      headerName: 'Data de Registro',
-      width: 180,
-      valueFormatter: (params: any) => dayjs(params.value).format('DD/MM/YYYY'),
+      field: 'data_insert',
+      headerName: 'Criado em',
+      flex: 1.5,
+      valueFormatter: (params: any) => dayjs(params.value).format('DD/MM/YY - HH:mm'),
     },
     {
-      field: 'nome_peca',
-      headerName: 'Peça',
-      width: 200,
+      field: 'data_update',
+      headerName: 'Atualizado em',
+      flex: 1.5,
+      valueFormatter: (params: any) => dayjs(params.value).format('DD/MM/YY - HH:mm'),
     },
     {
-      field: 'cod_controle',
-      headerName: 'Cod. Controle',
-      width: 140,
+      field: 'status',
+      headerName: 'Status',
+      flex: 1,
+      valueFormatter: (params: any) => params.value ? 'Ativo' : 'Inativo',
     },
     {
-      field: 'volume',
-      headerName: 'Volume',
-      width: 80,
-    },
-    {
-      field: 'unidade',
-      headerName: 'Unidade',
-      width: 120,
+      field: ' ',
+      headerName: ' ',
+      type: 'actions',
+      flex: 1,
+      renderCell: (params : any) => (
+        <div>
+          <Tooltip title={t('botao.editar.jogador')}>
+            <IconButton disabled={!params.row.status} sx={{color: theme.palette.primary.main}} onClick={() => handleOpen('edit', params.row.id_jogador)}><ModeEdit /></IconButton>
+          </Tooltip>
+          {open.edit && params.row.id_jogador === idToEdit && (
+            <>
+              <Modal_GerenciarJogadores value={idToEdit} title="editar" open={open.edit} onClose={() => handleClose('edit')}>
+                <></>
+              </Modal_GerenciarJogadores>
+          </>
+          )}
+          <Tooltip title={t(`botao.${params.row.status ? 'arquivar' : 'desarquivar'}.jogador`)}>
+            <IconButton sx={{color: theme.palette.primary.main}} onClick={() => handleOpen('archive', params.row.id_jogador)}>{params.row.status ? <Archive /> : <Unarchive />}</IconButton>
+          </Tooltip>
+          {open.archive && params.row.id_jogador === idToEdit && (
+            <>
+              <Modal_GerenciarJogadores value={idToEdit} title={params.row.status ? "arquivar" : "desarquivar"} open={open.archive} onClose={() => handleClose('archive')}>
+                <></>
+              </Modal_GerenciarJogadores>
+          </>
+          )}
+        </div>
+      ),
     },
   ];
 
   return (
     <Container maxWidth="xl">
-      <div>
         <Typography
           variant="h5"
           noWrap
@@ -113,79 +153,36 @@ export default function GerenciarJogadores() {
             display: { xs: "none", md: "flex", marginBottom: "20px" },
             fontWeight: 700,
             textDecoration: "none",
-          }}
-        >
-          Gerenciar Jogadores
-        </Typography>
+        }}
+      >
+        Gerenciar Jogadores
+      </Typography>
+      <Box sx={{ backgroundColor: theme.palette.boxColor.main, padding: '40px' }}>
         <Grid container spacing={3} marginBottom={2}>
           <Grid item xs={12} sm={3}>
             <TextField
               fullWidth
               label="Nome/Apelido do Jogador"
-              name="siglaObra"
-              value={filtrosJogador.nomeApelido}
+              name="nomeApelido"
+              value={filtros.nomeApelido}
               onChange={handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-              <DatePicker
-                label="Data Inicial"
-                value={dataInicial}
-                maxDate={dataFinal}
-                onChange={handleChange}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='pt-br'>
-              <DatePicker
-                label="Data Final"
-                value={dataFinal}
-                minDate={dataInicial}
-                onChange={(e) => setDataFinal(dayjs(e))}
-              />
-            </LocalizationProvider>
-
-          </Grid>
           <Grid item xs={12} sm={3}>
-            <FormControl fullWidth>
-              <InputLabel id="unidades-label">Unidade</InputLabel>
-              <Select
-                multiple
-                value={listaUnidades}
-                onChange={handleChange}
-                renderValue={(e) => e ? e.join(', ') : ''}
-                input={<OutlinedInput label="Unidade" />}
-              >
-                {/* {opcoesUnidades.map((unidade) => (
-                  <MenuItem key={unidade.key} value={unidade.value}>
-                    <Checkbox checked={listaUnidades.includes(unidade.value)} />
-                    {unidade.value}
-                  </MenuItem>
-                ))} */}
-              </Select>
-            </FormControl>
+            <DropDownList
+              name="statusJogador"
+              label='Status de Jogador'
+              options={opcoesStatus}
+              defaultItem={filtros.statusJogador}
+              item={filtros.statusJogador}
+              onChange={handleChange}
+            />
           </Grid>
         </Grid>
-      </div>
-      <Box sx={{ width: '100%' }}>
-        <DataGrid
-          rows={data}
+        <ListView
+          data={data}
           columns={columns}
-          initialState={{
-            sorting: {
-              sortModel: [{ field: 'data_registro', sort: 'asc' }],
-            },
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-          disableColumnMenu
+          id={(e: any) => e.id_jogador}
         />
       </Box>
     </Container>

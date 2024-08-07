@@ -1,0 +1,104 @@
+{
+    "titulo": {
+        "criar": {
+            "jogador": "Criação de jogador",
+            "personagem": "Criação de personagem",
+            "time": "Criação de time"
+        },
+        "editar": {
+            "jogador": "Edição de jogador",
+            "personagem": "Edição de personagem",
+            "time": "Edição de time"            
+
+        },
+        "arquivar": {
+            "jogador": "Arquivamento de jogador",
+            "personagem": "Arquivamento de personagem",
+            "time": "Arquivamento de time"
+        },
+        "desarquivar": {
+            "jogador": "Desarquivamento de jogador",
+            "personagem": "Desarquivamento de personagem",
+            "time": "Desarquivamento de time"
+        }
+    },
+    "botao": {
+        "salvar": "Salvar Alterações",
+        "cancelar":"Cancelar",
+        "voltar": "Voltar",
+        "criar" : {
+            "jogador": "Criar jogador",
+            "personagem": "Criar personagem",
+            "time": "Criar time"
+        },
+        "editar" : {
+            "jogador": "Editar jogador",
+            "personagem": "Editar personagem",
+            "time": "Editar time"           
+        },
+        "arquivar" : {
+            "jogador": "Arquivar jogador",
+            "personagem": "Arquivar personagem",
+            "time": "Arquivar time"
+        },
+        "desarquivar" : {
+            "jogador": "Desarquivar jogador",
+            "personagem": "Desarquivar personagem",
+            "time": "Desarquivar time"
+        },
+        "visualizar" : {
+            "time": "Ver integrantes do time"
+        },
+        "adicionar" : {
+            "membro": "Adicionar membro"
+        },
+        "confirmar" : {
+            "exclusao" : "Confirmar exclusão"
+        }
+    },
+    "mensagem" : {
+        "sucesso" : {
+            "criar": {
+                "jogador": "Jogador criado com sucesso",
+                "personagem": "Personagem criado com sucesso",
+                "time": "Time criado com sucesso"
+            },
+            "editar": {
+                "jogador": "Jogador editado com sucesso",
+                "personagem": "Personagem editado com sucesso",
+                "time": "Time editado com sucesso"
+            },
+            "arquivar": {
+                "jogador": "jogador arquivado com sucesso",
+                "personagem": "Personagem arquivado com sucesso",
+                "time" :"Time arquivado com sucesso"
+            },
+            "desarquivar": {
+                "jogador":" jogador desarquivado com sucesso",
+                "personagem": "Personagem desarquivado com sucesso",
+                "time": "Time desarquivado com sucesso"
+            },
+            "adicionar" : {
+                "membro": "Membro adicionado com sucesso"
+            },
+            "excluir" : {
+                "membro": "Membro excluído com sucesso"
+            }
+        },
+        "erro": {
+            "jogador": {
+
+            },
+            "perfil": {
+                "forbidden": "Não Permitido. Usuários ainda atribuídos a este perfil"
+            },
+            "time": {
+
+            }
+        }
+    },
+    "tabela": {
+        "paginador": "Itens/Página",
+        "vazia": "Nenhum dado encontrado"
+    }
+}
